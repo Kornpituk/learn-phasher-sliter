@@ -21,8 +21,8 @@ Shadow = function(game, sections, scale) {
     //various tints that the shadow could have
     //since the image is white
     this.darkTint = 0xaaaaaa;
-    this.lightTintBright = 0xaa3333;
-    this.lightTintDim = 0xdd3333;
+    this.lightTintBright = 0x33AA9F;
+    this.lightTintDim = 0x33DDCE;
 }
 
 Shadow.prototype = {
