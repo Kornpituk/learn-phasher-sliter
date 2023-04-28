@@ -8,8 +8,9 @@
 BotSnake = function(game, spriteKey, x, y) {
   Snake.call(this, game, spriteKey, x, y);
   this.trend = 1;
+  this.Number = 10
 }
-
+//01
 BotSnake.prototype = Object.create(Snake.prototype);
 BotSnake.prototype.constructor = BotSnake;
 

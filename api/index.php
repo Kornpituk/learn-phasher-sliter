@@ -21,7 +21,7 @@ $successMessage = "";
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['name'])) {
         $name = pg_escape_string($_POST['name']);
-        console_log("Name: " . $name);
+        // console_log("Name: " . $name);
     } else {
         $errorMessage = "The name field is missing";
     }
@@ -44,22 +44,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Data inserted successfully!";
         }
 
-        $id = pg_last_oid($conn);
-
-        // update the client's timestamp in the database
-        $sql = "UPDATE users SET create_at = NOW()";
-        $result = pg_query($conn, $sql);
-
-        if (!$result) {
-            echo "Error: " . pg_last_error();
-            break;
-        }
-
         $name = "";
 
         $successMessage = "Client Database added successfully";
 
-        header("Location: /code/phaser/learn-phasher-sliter/index.html?id=<?php echo $row[id]?>");
+        header("Location: /code/phaser/learn-phasher-sliter/index.php?id=<?php echo $row[id]?>");
         exit;
 
 
@@ -103,8 +92,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="card-text">Enter Your User Name here</p>
                 <form method="post">
                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                    <label for="username" name="name" id="name" value="<?php echo $name; ?>">UserName :</label>
-                    <input type="text">
+                    <label for="username">UserName :</label>
+                    <input type="text" name="name" id="name" value="<?php echo $name; ?>">
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </form>
 
