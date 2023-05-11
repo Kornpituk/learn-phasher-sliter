@@ -1,6 +1,9 @@
-Game = function (game) {};
+Game = function (game) {
+};
 
 Game.prototype = {
+
+
   preload: function () {
     //load assets
     this.game.load.image("circle", "asset/circle.png");
@@ -14,6 +17,7 @@ Game.prototype = {
     this.game.load.image("think", "asset/think.png");
 
     this.game.load.image("gravestone", "asset/gravestone.png");
+    this.game.load.image("wall-s", "asset/wall-s.png");
   },
   create: function () {
     var width = this.game.width;
@@ -62,8 +66,20 @@ Game.prototype = {
     this.game.think = [];
 
     //create player
-    var snake = new PlayerSnake(this.game, "circle", 0, 0);
+    var snake = new PlayerSnake(this.game, "circle", 0, 0, this.nameSnake);
     this.game.camera.follow(snake.head);
+
+    var gravestone = new Gravestone(this.game, "gravestone",200,0);
+    console.log(gravestone)
+
+     // ...wall
+     this.image = this.add.image(250,350, "wall-s")
+     this.image2 = this.add.image(250,650, "wall-s")
+    // var wall = new Wall(this.game, "wall-s",150,0);
+    // var wall2 = new Wall2(this.game, "wall-s",350,0);
+    // var wall3 = new Wall3(this.game, "wall-s",50,0);
+    // var wall4 = new Wall4(this.game, "wall-s",90,0);
+    // ...
 
     //create bots
     // new BotSnake(this.game, "circle", -200, 0);
@@ -109,6 +125,9 @@ Game.prototype = {
       var f = this.thinkGroup.children[i];
       f.think.update();
     }
+
+    this.image.rotation += 0.01;
+    this.image2.rotation += 0.01;
   },
   /**
    * Create a piece of food at a point
@@ -133,9 +152,9 @@ Game.prototype = {
   },
   snakeDestroyed: function (snake) {
     // display gravestone
-    var gravestone = new Gravestone(this.game, "gravestone",200,0);
-    console.log(gravestone)
+    
     //place food where snake was destroyed
+    
     for (
       var i = 0;
       i < snake.headPath.length;
@@ -145,8 +164,11 @@ Game.prototype = {
         snake.headPath[i].x + Util.randomInt(-10, 10),
         snake.headPath[i].y + Util.randomInt(-10, 10)
       );
+      var gt = this.add.image(snake.headPath[1].x,snake.headPath[1].y, "gravestone")
     }
+    
   },
+
   // updateScore: function (amount) {
   //   this.score += amount;
   //   this.scoreText.text = "Score: " + this.score;

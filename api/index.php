@@ -12,8 +12,9 @@ if (!$conn) {
     die("Connection failed: " . pg_last_error());
 }
 
-
+$id = "";
 $name = "";
+$score = "";
 
 $errorMessage = "";
 $successMessage = "";
@@ -42,22 +43,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: " . pg_last_error();
         } else {
             echo "Data inserted successfully!";
+            echo "Name :".$name;
         }
 
-        $name = "";
 
-        $successMessage = "Client Database added successfully";
+        if(isset($_POST['submit'])) {
+            $name = $_POST['name'];
+            if(!empty($name)) {
+                $successMessage = "Client Database added successfully name ="+$name;
+                
+              // do something with $name when it's not empty
+            } else {
+              $name = "Null"; // set $name to an empty string
+            }
+          }
 
-        header("Location: /code/phaser/learn-phasher-sliter/index.php?id=<?php echo $row[id]?>");
+
+
+        
+        // console.log("name: ".$name);
+        header("Location: getSnake.php?name=". urlencode($name));
         exit;
 
 
     } while (false);
+    
+    
+
+    
 }
+   
 
 
 ?>
-
 
 
 <!DOCTYPE html>
@@ -90,8 +108,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card-body">
                 <h5 class="card-title">Register User Name</h5>
                 <p class="card-text">Enter Your User Name here</p>
-                <form method="post">
-                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <form method="post" action="">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>">
                     <label for="username">UserName :</label>
                     <input type="text" name="name" id="name" value="<?php echo $name; ?>">
                     <button class="btn btn-primary" type="submit">Submit</button>

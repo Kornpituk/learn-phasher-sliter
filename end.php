@@ -22,38 +22,38 @@ $successMessage = "";
 if($_SERVER["REQUEST_METHOD"] == "GET") {
    // GET method : show the data of the client
 
-   if (!isset($_GET["name"])) {
-    // header("Location: /code/php/test/index.php");
-    //  cconsole_log("no name found, handle the error as needed");
-     $errorMessage = "no name found, handle the error as needed";
-    // exit;
+   if (!isset($_GET["name"]) || !isset($_GET["score"])) {
+     $errorMessage = "no name and score found, handle the error as needed";
+   } else {
+     $name = $_GET["name"];
+     $score = $_GET["score"];
+
+     // read the row of the selected client from database table
+     $sql = "SELECT * FROM snake WHERE name = '$name'";
+     $result = pg_query($conn, $sql);
+
+     if (!$result) {
+        echo "Error: " . pg_last_error();
+     } else {
+        $row = pg_fetch_array($result, null, PGSQL_ASSOC);
+        if (!$row) {
+            // no row found, handle the error as needed
+        } else {
+            // read the data from $row and use it as needed
+            $id = $row['id'];
+            $name = $row['name'];
+            $currentScore = $row['score'];
+
+            // update the score if the current score is less than the new score
+            if ($currentScore < $score) {
+              $sql = "UPDATE snake SET score = $score WHERE name = '$name'";
+              $result = pg_query($conn, $sql);
+            }
+        }
+     }
    }
-
-
-   $name = $_GET["name"];
-
-   //read the row of the selected cleint from database tabele
-   $sql = "SELECT * FROM snake WHERE name = '$name'";
-   $result = pg_query($conn, $sql);
-//    $result = $result = pg_query($conn, $sql);
-//    $row = $result->pg_fetch_assoc();
-
-if (!$result) {
-    echo "Error: " . pg_last_error();
-} else {
-    $row = pg_fetch_array($result, null, PGSQL_ASSOC);
-    if (!$row) {
-        // no row found, handle the error as needed
-    } else {
-        // read the data from $row and use it as needed
-        $id = $row['id'];
-        $name = $row['name'];
-        $score = $row['score'];
-    }
-}
 } 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +73,7 @@ if (!$result) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="asset\end.css">
 </head>
 
 <body>
@@ -81,7 +81,7 @@ if (!$result) {
         <div class="ranking">
             <div class="card text-center mg-10">
                 <div class="card-header">
-                    Test ID
+                    End Title
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Player Snake</h5>
@@ -112,7 +112,8 @@ if (!$result) {
                 </div>
                 <div class="card-footer text-muted">
                     <p style="color:white">Snake.... </p>
-                    <a class="btn btn-primary btn-lg" href="/code/phaser/learn-phasher-sliter/index.php?name=<?php echo urlencode($name);?>" role="button" aria-disabled="true" href="/index.php">Start Link a</a>
+                    <a class="btn btn-primary btn-lg" href="/code/phaser/learn-phasher-sliter/index.php?name=<?php echo urlencode($name);?>" role="button" aria-disabled="true" href="/index.php">Play again</a>
+                    <a class="btn btn-info btn-lg" href="/code/phaser/learn-phasher-sliter/api/index.php" role="button" aria-disabled="true" href="/index.php">Back to Game Register</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,21 @@
+body {
+    background-image: url('https://a-static.besthdwallpaper.com/asus-razer-abstract-fragments-art-wallpaper-1440x1080-63652_22.jpg');
+    font-family: "Open Sans", sans-serif;
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+  }
+  
+  .card-header {
+    background-color: chartreuse;
+  }
+  
+  .card-footer {
+    background-color: darkmagenta;
+    color: white;
+  }
+  
+  .ranking{
+    margin-top: 40px;
+  }
+  

@@ -4,9 +4,11 @@
  * @param  {String} spriteKey Phaser sprite key
  * @param  {Number} x         coordinate
  * @param  {Number} y         coordinate
+
  */
-Snake = function (game, spriteKey, x, y) {
+Snake = function (game, spriteKey, x, y, name) {
   this.game = game;
+  this.nameSnake = this.nameSnake;
   //create an array of snakes in the game object and add this snake
   if (!this.game.snakes) {
     this.game.snakes = [];
@@ -17,7 +19,7 @@ Snake = function (game, spriteKey, x, y) {
   this.spriteKey = spriteKey;
 
   //various quantities that can be changed
-  this.scale = 0.6;
+  this.scale = 0.4;
   this.fastSpeed = 200;
   this.slowSpeed = 130;
   this.speed = this.slowSpeed;
@@ -25,8 +27,6 @@ Snake = function (game, spriteKey, x, y) {
 
   //initialize groups and arrays
   this.collisionGroup = this.game.physics.p2.createCollisionGroup();
-
-  
 
   this.sections = [];
   //the head path is an array of points that the head of the snake has
@@ -82,14 +82,26 @@ Snake = function (game, spriteKey, x, y) {
   });
   this.scoreText.fixedToCamera = true;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const nameSnake = urlParams.get("name");
+  console.log("nameS: " + nameSnake);
   //Name
   //...
-  this.name = "name";
+  name = "Bot001-2";
+  this.name = nameSnake;
+  console.log("nameSnakes: " + this.nameSnake);
+  // this.name  "Bot001";
+
+  // console.log("name: " + this.name)
+
   this.nameText = game.add.text(x, y - 50, this.name, {
     font: "bold 20px Arial",
     fill: "#ffffff",
   });
   this.nameText.anchor.setTo(0.5);
+
+  // Get the URLSearchParams object
+  var params = new URLSearchParams(window.location.search);
 };
 
 Snake.prototype = {
@@ -313,7 +325,7 @@ Snake.prototype = {
   },
 
   testSnake: function () {
-    console.log("Hit! Snake!")
+    console.log("Hit! Snake!");
   },
   /**
    * Destroy the snake
@@ -339,13 +351,15 @@ Snake.prototype = {
     this.shadow.destroy();
     this.nameText.destroy();
 
-
     //call this snake's destruction callbacks
     for (var i = 0; i < this.onDestroyedCallbacks.length; i++) {
       if (typeof this.onDestroyedCallbacks[i] == "function") {
         this.onDestroyedCallbacks[i].apply(this.onDestroyedContexts[i], [this]);
       }
     }
+
+    this.saveScore(this.score,this.name);
+
   },
   /**
    * Called when the front of the snake (the edge) hits something
@@ -376,7 +390,16 @@ Snake.prototype = {
     this.score += amount;
     this.scoreText.text = "Score: " + this.score;
   },
+  saveScore: function (score,nameSnake) {
+    this.nameSnake = nameSnake;
+    this.score = score;
+    var url = "/code/phaser/learn-phasher-sliter/end.php?score=" + this.score+"&name="+this.nameSnake;
+    window.location.href = url;
+  },
+
+
 };
+
 
 // Snake.prototype.updateScore = function (amount) {
 //   this.score += amount;
